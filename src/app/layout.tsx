@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Shiv.ai \u2014 The World's Largest Shiva Knowledge Library",
-  description: "Ask anything about Lord Shiva. Powered by the most comprehensive collection of Shaivite knowledge \u2014 scriptures, philosophy, mythology, temples, mantras, and traditions from across the world.",
-  keywords: ["Shiva", "Lord Shiva", "Mahadev", "Shaivism", "Hindu philosophy", "Shiva AI", "Vedic knowledge"],
+  title: "Shiv.ai — Shiva, Gita & Vedas Knowledge Library",
+  description: "The world's largest AI-powered spiritual knowledge library. Ask anything about Lord Shiva, the Bhagavad Gita, and the Vedas. Powered by the most comprehensive collection of Hindu scriptures, philosophy, mythology, and traditions.",
+  keywords: ["Shiva", "Bhagavad Gita", "Vedas", "Hindu philosophy", "Shaivism", "Krishna", "Upanishads", "AI knowledge"],
   openGraph: {
-    title: "Shiv.ai \u2014 The World's Largest Shiva Knowledge Library",
-    description: "Ask anything about Lord Shiva. The most comprehensive AI-powered Shaivite knowledge base ever created.",
+    title: "Shiv.ai — Shiva, Gita & Vedas Knowledge Library",
+    description: "The world's largest AI-powered spiritual knowledge library covering Lord Shiva, Bhagavad Gita, and the Vedas.",
     url: "https://shiv.ai",
     siteName: "Shiv.ai",
     type: "website",
