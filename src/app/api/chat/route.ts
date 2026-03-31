@@ -10,7 +10,6 @@ interface ChatMessage {
   content: string;
 }
 
-type TabId = "shiv" | "gita" | "veda";
 
 function getSystemPrompt(tab: string): string {
   if (tab === "gita") return GITA_SYSTEM_PROMPT;
@@ -83,9 +82,9 @@ async function logQuery(question: string, provider: string, tab: string, request
 
 export async function POST(request: Request) {
   try {
-    const { messages, tab = "shiv" }: { messages: ChatMessage[]; tab?: TabId } = await request.json();
+    const { messages, tab = "shiv" }: { messages: ChatMessage[]; tab?: string } = await request.json();
 
-    const validTab: TabId = ["shiv", "gita", "veda", "buddha"].includes(tab) ? tab : "shiv";
+    const validTab: string = ["shiv", "gita", "veda", "buddha"].includes(tab) ? tab : "shiv";
     const latestQuestion = messages.filter((m) => m.role === "user").pop()?.content || "";
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
@@ -230,8 +229,8 @@ async function streamFromOpenAI(messages: ChatMessage[], apiKey: string, systemP
   });
 }
 
-function generateFallbackResponse(messages: ChatMessage[], tab: TabId): Response {
-  const fallbacks: Record<TabId, string> = {
+function generateFallbackResponse(messages: ChatMessage[], tab: string): Response {
+  const fallbacks: Record<string, string> = {
     shiv: `## Welcome to Shiv.ai\n\nI am **Shiv.ai**, the world's largest Shiva knowledge library. Please ensure the API key is configured for full AI-powered responses.\n\nOm Namah Shivaya`,
     gita: `## Welcome to Gita.ai\n\nI am **Gita.ai**, dedicated to the timeless wisdom of the Bhagavad Gita. Please ensure the API key is configured for full AI-powered responses.\n\nJai Shri Krishna`,
     veda: `## Welcome to Veda.ai\n\nI am **Veda.ai**, the most comprehensive Vedic knowledge system ever created. Please ensure the API key is configured for full AI-powered responses.\n\nOm`,
