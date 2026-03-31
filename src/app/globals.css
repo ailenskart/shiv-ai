@@ -124,6 +124,16 @@ body {
 }
 
 
+
+/* Hide scrollbar for tab navigation */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Mobile tab responsiveness */
 @media (max-width: 768px) {
   .tab-btn {
