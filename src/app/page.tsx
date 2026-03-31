@@ -65,7 +65,7 @@ export default function Home() {
       </div>
 
       {/* Header with Tabs */}
-      <header className="relative z-10 flex flex-col md:flex-row items-center justify-between px-6 md:px-12 py-6 gap-4">
+      <header className="relative z-10 flex flex-col md:flex-row items-center justify-between px-3 md:px-12 py-4 md:py-6 gap-3 md:gap-4">
         <div className="flex items-center gap-3">
           <div className="text-3xl om-glow" style={{ fontFamily: "'Cinzel', serif" }}>
             {tab.symbol}
@@ -76,7 +76,7 @@ export default function Home() {
         </div>
 
         {/* Tab Switcher */}
-        <nav className="flex items-center gap-2 bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800">
+        <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800 max-w-[90vw] scrollbar-hide">
           {(Object.keys(TABS) as TabId[]).map((t) => (
             <button
               key={t}
