@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { SUGGESTED_QUESTIONS } from "@/lib/shiva-knowledge";
 import { GITA_SUGGESTED_QUESTIONS } from "@/lib/gita-knowledge";
 import { VEDA_SUGGESTED_QUESTIONS } from "@/lib/veda-knowledge";
+import { BUDDHA_SUGGESTED_QUESTIONS } from "@/lib/buddha-knowledge";
 import { TABS, TabId } from "@/lib/tab-config";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -100,6 +101,9 @@ function ChatContent() {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
+      case "buddha":
+        return BUDDHA_SUGGESTED_QUESTIONS;
+        break;
           const chunk = decoder.decode(value);
           fullContent += chunk;
           setStreamingContent(fullContent);
