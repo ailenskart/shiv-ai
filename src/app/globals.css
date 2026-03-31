@@ -122,3 +122,19 @@ body {
   border-color: var(--tab-primary, #FF6B00);
   background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
 }
+
+
+/* Mobile tab responsiveness */
+@media (max-width: 768px) {
+  .tab-btn {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-btn {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.7rem;
+  }
+}
