@@ -54,6 +54,16 @@ body {
   --tab-border: rgba(123, 104, 238, 0.15);
 }
 
+[data-tab="buddha"] {
+  --tab-primary: #D4A017;
+  --tab-primary-light: #E8B930;
+  --tab-primary-dark: #B8860B;
+  --tab-secondary: #FF8C00;
+  --tab-glow: rgba(212, 160, 23, 0.5);
+  --tab-glow-soft: rgba(212, 160, 23, 0.3);
+  --tab-border: rgba(212, 160, 23, 0.15);
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
   50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
