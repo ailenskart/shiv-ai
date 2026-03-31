@@ -12,14 +12,14 @@ interface ChatMessage {
 
 type TabId = "shiv" | "gita" | "veda";
 
-function getSystemPrompt(tab: TabId): string {
+function getSystemPrompt(tab: string): string {
   if (tab === "gita") return GITA_SYSTEM_PROMPT;
   if (tab === "veda") return VEDA_SYSTEM_PROMPT;
   if (tab === "buddha") return BUDDHA_SYSTEM_PROMPT;
   return SHIVA_SYSTEM_PROMPT;
 }
 
-async function getEnhancedSystemPrompt(tab: TabId): Promise<string> {
+async function getEnhancedSystemPrompt(tab: string): Promise<string> {
   const base = getSystemPrompt(tab);
   try {
     const supabaseUrl = process.env.SUPABASE_URL;
