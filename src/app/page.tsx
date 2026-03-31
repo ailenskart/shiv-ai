@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SUGGESTED_QUESTIONS } from "@/lib/shiva-knowledge";
 import { GITA_SUGGESTED_QUESTIONS, GITA_KNOWLEDGE_STATS } from "@/lib/gita-knowledge";
 import { VEDA_SUGGESTED_QUESTIONS, VEDA_KNOWLEDGE_STATS } from "@/lib/veda-knowledge";
+import { BUDDHA_SUGGESTED_QUESTIONS } from "@/lib/buddha-knowledge";
 import { TabId, TABS, getTabConfig } from "@/lib/tab-config";
 
 const SHIV_STATS = [
@@ -17,15 +18,26 @@ const SHIV_STATS = [
   { number: "∞", label: "Dimensions of Shiva" },
 ];
 
+const BUDDHA_STATS = [
+  { number: "84,000+", label: "Dharma Teachings" },
+  { number: "3", label: "Major Traditions" },
+  { number: "500+", label: "Jataka Tales" },
+  { number: "108", label: "Sacred Practices" },
+  { number: "2,500+", label: "Years of Wisdom" },
+  { number: "4", label: "Noble Truths" },
+];
+
 function getQuestions(tab: TabId) {
   if (tab === "gita") return GITA_SUGGESTED_QUESTIONS;
   if (tab === "veda") return VEDA_SUGGESTED_QUESTIONS;
+  if (tab === "buddha") return BUDDHA_SUGGESTED_QUESTIONS;
   return SUGGESTED_QUESTIONS;
 }
 
 function getStats(tab: TabId) {
   if (tab === "gita") return GITA_KNOWLEDGE_STATS;
   if (tab === "veda") return VEDA_KNOWLEDGE_STATS;
+  if (tab === "buddha") return BUDDHA_STATS;
   return SHIV_STATS;
 }
 
