@@ -85,7 +85,7 @@ function ChatContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: text.trim(),
+          messages: [...messages, { role: "user" as const, content: text.trim() }],
           tab: tabOverride || activeTab,
         }),
       });
