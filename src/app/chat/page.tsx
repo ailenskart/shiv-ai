@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { SUGGESTED_QUESTIONS } from "@/lib/shiva-knowledge";
 import { GITA_SUGGESTED_QUESTIONS } from "@/lib/gita-knowledge";
 import { VEDA_SUGGESTED_QUESTIONS } from "@/lib/veda-knowledge";
-import { TABS, TabId } from "@/lib/tabs";
+import { TABS, TabId } from "@/lib/tab-config";
 
 type Message = { role: "user" | "assistant"; content: string };
 
