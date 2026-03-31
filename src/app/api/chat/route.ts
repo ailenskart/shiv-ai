@@ -1,6 +1,7 @@
 import { SHIVA_SYSTEM_PROMPT } from "@/lib/shiva-knowledge";
 import { GITA_SYSTEM_PROMPT } from "@/lib/gita-knowledge";
 import { VEDA_SYSTEM_PROMPT } from "@/lib/veda-knowledge";
+import { BUDDHA_SYSTEM_PROMPT } from "@/lib/buddha-knowledge";
 
 export const runtime = "edge";
 
@@ -14,6 +15,7 @@ type TabId = "shiv" | "gita" | "veda";
 function getSystemPrompt(tab: TabId): string {
   if (tab === "gita") return GITA_SYSTEM_PROMPT;
   if (tab === "veda") return VEDA_SYSTEM_PROMPT;
+  if (tab === "buddha") return BUDDHA_SYSTEM_PROMPT;
   return SHIVA_SYSTEM_PROMPT;
 }
 
@@ -83,7 +85,7 @@ export async function POST(request: Request) {
   try {
     const { messages, tab = "shiv" }: { messages: ChatMessage[]; tab?: TabId } = await request.json();
 
-    const validTab: TabId = ["shiv", "gita", "veda"].includes(tab) ? tab : "shiv";
+    const validTab: TabId = ["shiv", "gita", "veda", "buddha"].includes(tab) ? tab : "shiv";
     const latestQuestion = messages.filter((m) => m.role === "user").pop()?.content || "";
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
@@ -233,6 +235,7 @@ function generateFallbackResponse(messages: ChatMessage[], tab: TabId): Response
     shiv: `## Welcome to Shiv.ai\n\nI am **Shiv.ai**, the world's largest Shiva knowledge library. Please ensure the API key is configured for full AI-powered responses.\n\nOm Namah Shivaya`,
     gita: `## Welcome to Gita.ai\n\nI am **Gita.ai**, dedicated to the timeless wisdom of the Bhagavad Gita. Please ensure the API key is configured for full AI-powered responses.\n\nJai Shri Krishna`,
     veda: `## Welcome to Veda.ai\n\nI am **Veda.ai**, the most comprehensive Vedic knowledge system ever created. Please ensure the API key is configured for full AI-powered responses.\n\nOm`,
+      buddha: "Namo Buddhaya \u2638\uFE0F The path to understanding begins with the Four Noble Truths. Buddhism teaches that suffering (dukkha) can be understood, its causes addressed, and liberation achieved through the Noble Eightfold Path. How may I illuminate the Dharma for you?",
   };
 
   const response = fallbacks[tab] || fallbacks.shiv;
