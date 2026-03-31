@@ -15,6 +15,7 @@ function getQuestions(tab: TabId) {
     case "shiv": return SUGGESTED_QUESTIONS;
     case "gita": return GITA_SUGGESTED_QUESTIONS;
     case "veda": return VEDA_SUGGESTED_QUESTIONS;
+    case "buddha": return BUDDHA_SUGGESTED_QUESTIONS;
   }
 }
 
@@ -101,9 +102,6 @@ function ChatContent() {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-      case "buddha":
-        return BUDDHA_SUGGESTED_QUESTIONS;
-        break;
           const chunk = decoder.decode(value);
           fullContent += chunk;
           setStreamingContent(fullContent);
