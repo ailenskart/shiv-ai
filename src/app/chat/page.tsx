@@ -11,7 +11,7 @@ type Message = { role: "user" | "assistant"; content: string };
 
 function getQuestions(tab: TabId) {
   switch (tab) {
-    case "shiva": return SUGGESTED_QUESTIONS;
+    case "shiv": return SUGGESTED_QUESTIONS;
     case "gita": return GITA_SUGGESTED_QUESTIONS;
     case "veda": return VEDA_SUGGESTED_QUESTIONS;
   }
@@ -65,7 +65,7 @@ function ChatContent() {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
   const [activeTab, setActiveTab] = useState<TabId>(
-    (searchParams.get("tab") as TabId) || "shiva"
+    (searchParams.get("tab") as TabId) || "shiv"
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -131,7 +131,7 @@ function ChatContent() {
     if (tabParam) setActiveTab(tabParam);
     if (q) {
       setInput(q);
-      sendMessage(q, tabParam || "shiva");
+      sendMessage(q, tabParam || "shiv");
     }
   }, [searchParams, sendMessage]);
 
