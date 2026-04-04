@@ -32,10 +32,10 @@ export const ALL_KNOWLEDGE_SUGGESTED_QUESTIONS = [
 ];
 
 export const ALL_KNOWLEDGE_STATS = [
-  { label: "Traditions", value: "7+" },
-  { label: "Sacred Texts", value: "50+" },
-  { label: "Combined Verses", value: "100K+" },
-  { label: "Years of Wisdom", value: "5000+" },
-  { label: "Spiritual Paths", value: "All" },
-  { label: "Universal Truths", value: "\u221E" }
+  { label: "Traditions", number: "7+" },
+  { label: "Sacred Texts", number: "50+" },
+  { label: "Combined Verses", number: "100K+" },
+  { label: "Years of Wisdom", number: "5000+" },
+  { label: "Spiritual Paths", number: "All" },
+  { label: "Universal Truths", number: "\u221E" }
 ];
