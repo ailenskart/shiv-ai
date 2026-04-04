@@ -1,4 +1,4 @@
-export type TabId = "shiv" | "gita" | "veda" | "buddha";
+export type TabId = "shiv" | "gita" | "veda" | "buddha" | "christ" | "quran" | "jain";
 
 export interface TabConfig {
   id: TabId;
@@ -15,6 +15,7 @@ export interface TabConfig {
   chatSubtitle: string;
   inputPlaceholder: string;
   sourceLine: string;
+  color: string;
 }
 
 export const TABS: Record<TabId, TabConfig> = {
@@ -31,8 +32,9 @@ export const TABS: Record<TabId, TabConfig> = {
     footerText: "Powered by Shiv.ai \u2014 The World's Largest Shiva Knowledge Library",
     exploreLabel: "Explore Shiva Wisdom",
     chatSubtitle: "The World's Largest Lord Shiva Knowledge Library",
-    inputPlaceholder: "Ask anything — powered by Shiva wisdom...",
+    inputPlaceholder: "Ask anything \u2014 powered by Shiva wisdom...",
     sourceLine: "Sources: Shiv Purana, Linga Purana, Vedic Texts",
+    color: "#FF6B00",
   },
   gita: {
     id: "gita",
@@ -47,8 +49,9 @@ export const TABS: Record<TabId, TabConfig> = {
     footerText: "Powered by Gita.ai \u2014 The Complete Gita Knowledge System",
     exploreLabel: "Explore Gita Wisdom",
     chatSubtitle: "The Complete Bhagavad Gita Knowledge System",
-    inputPlaceholder: "Ask anything — powered by Gita wisdom...",
+    inputPlaceholder: "Ask anything \u2014 powered by Gita wisdom...",
     sourceLine: "Source: Bhagavad Gita, 18 Chapters, 700 Verses",
+    color: "#E6A817",
   },
   veda: {
     id: "veda",
@@ -63,8 +66,9 @@ export const TABS: Record<TabId, TabConfig> = {
     footerText: "Powered by Veda.ai \u2014 The Complete Vedic Knowledge System",
     exploreLabel: "Explore Vedic Wisdom",
     chatSubtitle: "The Most Comprehensive Vedic Knowledge System",
-    inputPlaceholder: "Ask anything — powered by Vedic wisdom...",
+    inputPlaceholder: "Ask anything \u2014 powered by Vedic wisdom...",
     sourceLine: "Sources: Rig Veda, Yajur Veda, Sama Veda, Atharva Veda",
+    color: "#7B68EE",
   },
   buddha: {
     id: "buddha",
@@ -79,8 +83,60 @@ export const TABS: Record<TabId, TabConfig> = {
     footerText: "Powered by Buddha.ai \u2014 The Complete Buddhism Knowledge System",
     exploreLabel: "Explore Buddhist Wisdom",
     chatSubtitle: "The World's Most Comprehensive Buddhism Knowledge Library",
-    inputPlaceholder: "Ask anything — powered by Buddhist wisdom...",
+    inputPlaceholder: "Ask anything \u2014 powered by Buddhist wisdom...",
     sourceLine: "Sources: Tripitaka, Dhammapada, Heart Sutra, Lotus Sutra",
+    color: "#D4A017",
+  },
+  christ: {
+    id: "christ",
+    name: "Christ.ai",
+    domain: "christ.ai",
+    symbol: "\u271D\uFE0F",
+    tagline: "The Complete Christian Wisdom & Biblical Knowledge Library",
+    subtitle: "Explore the teachings of Jesus Christ and the Holy Bible",
+    placeholder: "Ask anything and Christ.ai will answer through the teachings of Jesus and the Bible",
+    buttonLabel: "Ask Christ.ai",
+    footerMantra: "For God so loved the world \u271D\uFE0F",
+    footerText: "Powered by Christ.ai \u2014 The Complete Christian Knowledge System",
+    exploreLabel: "Explore Christian Wisdom",
+    chatSubtitle: "The Complete Christian Wisdom & Biblical Knowledge Library",
+    inputPlaceholder: "Ask anything \u2014 powered by Biblical wisdom...",
+    sourceLine: "Sources: Holy Bible, Old & New Testament, Church Teachings",
+    color: "#4169E1",
+  },
+  quran: {
+    id: "quran",
+    name: "Quran.ai",
+    domain: "quran.ai",
+    symbol: "\u2622\uFE0F",
+    tagline: "The Complete Quranic Wisdom & Islamic Knowledge Library",
+    subtitle: "Explore the divine wisdom of the Holy Quran and Islamic teachings",
+    placeholder: "Ask anything and Quran.ai will answer through the wisdom of the Holy Quran",
+    buttonLabel: "Ask Quran.ai",
+    footerMantra: "Bismillah ir-Rahman ir-Rahim \u262A\uFE0F",
+    footerText: "Powered by Quran.ai \u2014 The Complete Islamic Knowledge System",
+    exploreLabel: "Explore Quranic Wisdom",
+    chatSubtitle: "The Complete Quranic Wisdom & Islamic Knowledge Library",
+    inputPlaceholder: "Ask anything \u2014 powered by Quranic wisdom...",
+    sourceLine: "Sources: Holy Quran, Hadith, Sunnah, Islamic Scholarship",
+    color: "#2E8B57",
+  },
+  jain: {
+    id: "jain",
+    name: "Jain.ai",
+    domain: "jain.ai",
+    symbol: "\u2721\uFE0F",
+    tagline: "The Complete Jain Philosophy & Wisdom Knowledge Library",
+    subtitle: "Explore the path of non-violence and spiritual liberation",
+    placeholder: "Ask anything and Jain.ai will answer through the wisdom of Jain Tirthankaras",
+    buttonLabel: "Ask Jain.ai",
+    footerMantra: "Parasparopagraho Jivanam \uD83D\uDD49\uFE0F",
+    footerText: "Powered by Jain.ai \u2014 The Complete Jain Knowledge System",
+    exploreLabel: "Explore Jain Wisdom",
+    chatSubtitle: "The Complete Jain Philosophy & Wisdom Knowledge Library",
+    inputPlaceholder: "Ask anything \u2014 powered by Jain wisdom...",
+    sourceLine: "Sources: Agamas, Tattvartha Sutra, Teachings of Tirthankaras",
+    color: "#FF4500",
   },
 };
 
