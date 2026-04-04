@@ -66,6 +66,36 @@ body {
 
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+
+[data-tab="christ"] {
+  --tab-primary: #4169E1;
+  --tab-primary-light: #6B8BFF;
+  --tab-primary-dark: #2850C8;
+  --tab-secondary: #FFD700;
+  --tab-glow: rgba(65, 105, 225, 0.5);
+  --tab-glow-soft: rgba(65, 105, 225, 0.3);
+  --tab-border: rgba(65, 105, 225, 0.15);
+}
+
+[data-tab="quran"] {
+  --tab-primary: #2E8B57;
+  --tab-primary-light: #3CB371;
+  --tab-primary-dark: #1E6B3E;
+  --tab-secondary: #FFD700;
+  --tab-glow: rgba(46, 139, 87, 0.5);
+  --tab-glow-soft: rgba(46, 139, 87, 0.3);
+  --tab-border: rgba(46, 139, 87, 0.15);
+}
+
+[data-tab="jain"] {
+  --tab-primary: #FF4500;
+  --tab-primary-light: #FF6B3D;
+  --tab-primary-dark: #CC3700;
+  --tab-secondary: #FFD700;
+  --tab-glow: rgba(255, 69, 0, 0.5);
+  --tab-glow-soft: rgba(255, 69, 0, 0.3);
+  --tab-border: rgba(255, 69, 0, 0.15);
+}
   50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
 }
 
@@ -144,17 +174,59 @@ body {
   scrollbar-width: none;
 }
 
-/* Mobile tab responsiveness */
+/* Mobile tab responsiveness - fluid UI */
 @media (max-width: 768px) {
   .tab-btn {
-    padding: 0.4rem 0.9rem;
-    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    gap: 0.25rem;
+  }
+  
+  .tab-btn .mr-1,
+  .tab-btn .mr-1\.5 {
+    margin-right: 0.15rem;
   }
 }
 
 @media (max-width: 480px) {
   .tab-btn {
-    padding: 0.35rem 0.7rem;
-    font-size: 0.7rem;
+    padding: 0.3rem 0.55rem;
+    font-size: 0.65rem;
+  }
+}
+
+/* Smooth tab scroll on mobile */
+nav.scrollbar-hide {
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding: 0 0.5rem;
+}
+
+nav.scrollbar-hide .tab-btn {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Fade edges on scrollable tab nav */
+@media (max-width: 768px) {
+  nav.scrollbar-hide {
+    mask-image: linear-gradient(to right, transparent 0, black 8px, black calc(100% - 8px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 8px, black calc(100% - 8px), transparent 100%);
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Better touch targets on mobile */
+@media (max-width: 768px) {
+  .glass button, .glass a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 }
