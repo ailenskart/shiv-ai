@@ -5,6 +5,7 @@ import { BUDDHA_SYSTEM_PROMPT } from "@/lib/buddha-knowledge";
 import { CHRISTIANITY_SYSTEM_PROMPT } from "@/lib/christianity-knowledge";
 import { QURAN_SYSTEM_PROMPT } from "@/lib/quran-knowledge";
 import { JAINISM_SYSTEM_PROMPT } from "@/lib/jainism-knowledge";
+import { ALL_KNOWLEDGE_SYSTEM_PROMPT } from "@/lib/all-knowledge";
 
 export const runtime = "edge";
 
@@ -21,6 +22,7 @@ function getSystemPrompt(tab: string): string {
   if (tab === "christ") return CHRISTIANITY_SYSTEM_PROMPT;
   if (tab === "quran") return QURAN_SYSTEM_PROMPT;
   if (tab === "jain") return JAINISM_SYSTEM_PROMPT;
+  if (tab === "all") return ALL_KNOWLEDGE_SYSTEM_PROMPT;
   return SHIVA_SYSTEM_PROMPT;
 }
 
@@ -90,7 +92,7 @@ export async function POST(request: Request) {
   try {
     const { messages, tab = "shiv" }: { messages: ChatMessage[]; tab?: string } = await request.json();
 
-    const validTab: string = ["shiv", "gita", "veda", "buddha", "christ", "quran", "jain"].includes(tab) ? tab : "shiv";
+    const validTab: string = ["shiv", "gita", "veda", "buddha", "christ", "quran", "jain", "all"].includes(tab) ? tab : "shiv";
     const latestQuestion = messages.filter((m) => m.role === "user").pop()?.content || "";
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
@@ -244,6 +246,7 @@ function generateFallbackResponse(messages: ChatMessage[], tab: string): Respons
     christ: "Peace be with you \u271D\uFE0F Christ.ai is the comprehensive Christian wisdom library. The teachings of Jesus Christ emphasize love, grace, forgiveness, and the Kingdom of God. How may I illuminate Scripture for you?",
     quran: "Bismillah ir-Rahman ir-Rahim \u262A\uFE0F Quran.ai is the comprehensive Islamic knowledge library. The Holy Quran is the divine guidance for all humanity. How may I share the wisdom of the Quran with you?",
     jain: "Jai Jinendra \uD83D\uDD49\uFE0F Jain.ai is the comprehensive Jain wisdom library. The path of Ahimsa (non-violence) and the teachings of the 24 Tirthankaras guide us toward liberation. How may I share Jain wisdom with you?",
+    all: "Welcome to the Universal Wisdom Library \uD83C\uDF0D All the world's great spiritual traditions unite here. From the Vedas to the Bible, from the Quran to the teachings of Buddha and Mahavira — ask anything and receive wisdom drawn from all faiths. How may universal wisdom guide you today?",
   };
 
   const response = fallbacks[tab] || fallbacks.shiv;
