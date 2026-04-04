@@ -9,6 +9,7 @@ import { BUDDHA_SUGGESTED_QUESTIONS } from "@/lib/buddha-knowledge";
 import { CHRISTIANITY_SUGGESTED_QUESTIONS } from "@/lib/christianity-knowledge";
 import { QURAN_SUGGESTED_QUESTIONS } from "@/lib/quran-knowledge";
 import { JAINISM_SUGGESTED_QUESTIONS } from "@/lib/jainism-knowledge";
+import { ALL_KNOWLEDGE_SUGGESTED_QUESTIONS } from "@/lib/all-knowledge";
 import { TABS, TabId } from "@/lib/tab-config";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -25,6 +26,8 @@ function getQuestions(tab: TabId) {
       return QURAN_SUGGESTED_QUESTIONS;
     case "jain":
       return JAINISM_SUGGESTED_QUESTIONS;
+    case "all":
+      return ALL_KNOWLEDGE_SUGGESTED_QUESTIONS;
     default:
       return SUGGESTED_QUESTIONS;
   }
