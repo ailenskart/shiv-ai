@@ -2,6 +2,9 @@ import { SHIVA_SYSTEM_PROMPT } from "@/lib/shiva-knowledge";
 import { GITA_SYSTEM_PROMPT } from "@/lib/gita-knowledge";
 import { VEDA_SYSTEM_PROMPT } from "@/lib/veda-knowledge";
 import { BUDDHA_SYSTEM_PROMPT } from "@/lib/buddha-knowledge";
+import { CHRISTIANITY_SYSTEM_PROMPT } from "@/lib/christianity-knowledge";
+import { QURAN_SYSTEM_PROMPT } from "@/lib/quran-knowledge";
+import { JAINISM_SYSTEM_PROMPT } from "@/lib/jainism-knowledge";
 
 export const runtime = "edge";
 
@@ -15,6 +18,9 @@ function getSystemPrompt(tab: string): string {
   if (tab === "gita") return GITA_SYSTEM_PROMPT;
   if (tab === "veda") return VEDA_SYSTEM_PROMPT;
   if (tab === "buddha") return BUDDHA_SYSTEM_PROMPT;
+  if (tab === "christ") return CHRISTIANITY_SYSTEM_PROMPT;
+  if (tab === "quran") return QURAN_SYSTEM_PROMPT;
+  if (tab === "jain") return JAINISM_SYSTEM_PROMPT;
   return SHIVA_SYSTEM_PROMPT;
 }
 
@@ -84,7 +90,7 @@ export async function POST(request: Request) {
   try {
     const { messages, tab = "shiv" }: { messages: ChatMessage[]; tab?: string } = await request.json();
 
-    const validTab: string = ["shiv", "gita", "veda", "buddha"].includes(tab) ? tab : "shiv";
+    const validTab: string = ["shiv", "gita", "veda", "buddha", "christ", "quran", "jain"].includes(tab) ? tab : "shiv";
     const latestQuestion = messages.filter((m) => m.role === "user").pop()?.content || "";
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
@@ -235,6 +241,9 @@ function generateFallbackResponse(messages: ChatMessage[], tab: string): Respons
     gita: `## Welcome to Gita.ai\n\nI am **Gita.ai**, dedicated to the timeless wisdom of the Bhagavad Gita. Please ensure the API key is configured for full AI-powered responses.\n\nJai Shri Krishna`,
     veda: `## Welcome to Veda.ai\n\nI am **Veda.ai**, the most comprehensive Vedic knowledge system ever created. Please ensure the API key is configured for full AI-powered responses.\n\nOm`,
       buddha: "Namo Buddhaya \u2638\uFE0F The path to understanding begins with the Four Noble Truths. Buddhism teaches that suffering (dukkha) can be understood, its causes addressed, and liberation achieved through the Noble Eightfold Path. How may I illuminate the Dharma for you?",
+    christ: "Peace be with you \u271D\uFE0F Christ.ai is the comprehensive Christian wisdom library. The teachings of Jesus Christ emphasize love, grace, forgiveness, and the Kingdom of God. How may I illuminate Scripture for you?",
+    quran: "Bismillah ir-Rahman ir-Rahim \u262A\uFE0F Quran.ai is the comprehensive Islamic knowledge library. The Holy Quran is the divine guidance for all humanity. How may I share the wisdom of the Quran with you?",
+    jain: "Jai Jinendra \uD83D\uDD49\uFE0F Jain.ai is the comprehensive Jain wisdom library. The path of Ahimsa (non-violence) and the teachings of the 24 Tirthankaras guide us toward liberation. How may I share Jain wisdom with you?",
   };
 
   const response = fallbacks[tab] || fallbacks.shiv;
