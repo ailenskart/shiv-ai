@@ -1,4 +1,4 @@
-export type TabId = "shiv" | "gita" | "veda" | "buddha" | "christ" | "quran" | "jain";
+export type TabId = "shiv" | "gita" | "veda" | "buddha" | "christ" | "quran" | "jain" | "all";
 
 export interface TabConfig {
   id: TabId;
@@ -137,6 +137,19 @@ export const TABS: Record<TabId, TabConfig> = {
     inputPlaceholder: "Ask anything \u2014 powered by Jain wisdom...",
     sourceLine: "Sources: Agamas, Tattvartha Sutra, Teachings of Tirthankaras",
     color: "#FF4500",
+  },
+  all: {
+    id: "all",
+    name: "All Wisdom",
+    domain: "shiv.ai",
+    symbol: "🌍",
+    tagline: "The Universal Multi-Faith Wisdom Library",
+    subtitle: "Combined wisdom from all spiritual traditions",
+    placeholder: "Ask anything and receive wisdom drawn from all the world's great spiritual traditions",
+    buttonLabel: "Seek Universal Wisdom",
+    footerMantra: "🕉️ Wisdom is One, Paths are Many 🕉️",
+    sourceLine: "Source: All Sacred Texts & Traditions Combined",
+    color: "#9333EA",
   },
 };
 
