@@ -19,6 +19,14 @@ function getQuestions(tab: TabId) {
     case "gita": return GITA_SUGGESTED_QUESTIONS;
     case "veda": return VEDA_SUGGESTED_QUESTIONS;
     case "buddha": return BUDDHA_SUGGESTED_QUESTIONS;
+    case "christ":
+      return CHRISTIANITY_SUGGESTED_QUESTIONS;
+    case "quran":
+      return QURAN_SUGGESTED_QUESTIONS;
+    case "jain":
+      return JAINISM_SUGGESTED_QUESTIONS;
+    default:
+      return SUGGESTED_QUESTIONS;
   }
 }
 
