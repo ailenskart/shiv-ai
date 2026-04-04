@@ -106,10 +106,13 @@ export async function POST(request: Request) {
 
     const systemPrompt = await getEnhancedSystemPrompt(validTab);
 
+    // Append formatting rules to reduce excessive markdown
+    const formattedPrompt = systemPrompt + "\n\nIMPORTANT FORMATTING RULES: Write in natural, flowing prose. Do NOT use excessive bold (**text**) formatting. Do NOT use bullet points or numbered lists unless the user specifically asks for a list. Avoid markdown headers. Keep your tone warm, conversational, and wise — like a teacher speaking to a student, not a textbook. Use short paragraphs instead of lists. Only use bold sparingly for sacred text names or key Sanskrit/Arabic/Pali terms, not for every concept.";
+
     if (anthropicKey) {
-      return streamFromAnthropic(messages, anthropicKey, systemPrompt);
+      return streamFromAnthropic(messages, anthropicKey, formattedPrompt);
     } else if (openaiKey) {
-      return streamFromOpenAI(messages, openaiKey, systemPrompt);
+      return streamFromOpenAI(messages, openaiKey, formattedPrompt);
     } else {
       return generateFallbackResponse(messages, validTab);
     }
