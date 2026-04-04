@@ -5,6 +5,9 @@ import { SUGGESTED_QUESTIONS } from "@/lib/shiva-knowledge";
 import { GITA_SUGGESTED_QUESTIONS, GITA_KNOWLEDGE_STATS } from "@/lib/gita-knowledge";
 import { VEDA_SUGGESTED_QUESTIONS, VEDA_KNOWLEDGE_STATS } from "@/lib/veda-knowledge";
 import { BUDDHA_SUGGESTED_QUESTIONS } from "@/lib/buddha-knowledge";
+import { CHRISTIANITY_SUGGESTED_QUESTIONS, CHRISTIANITY_KNOWLEDGE_STATS } from "@/lib/christianity-knowledge";
+import { QURAN_SUGGESTED_QUESTIONS, QURAN_KNOWLEDGE_STATS } from "@/lib/quran-knowledge";
+import { JAINISM_SUGGESTED_QUESTIONS, JAINISM_KNOWLEDGE_STATS } from "@/lib/jainism-knowledge";
 import { TabId, TABS, getTabConfig } from "@/lib/tab-config";
 
 const SHIV_STATS = [
@@ -31,6 +34,9 @@ function getQuestions(tab: TabId) {
   if (tab === "gita") return GITA_SUGGESTED_QUESTIONS;
   if (tab === "veda") return VEDA_SUGGESTED_QUESTIONS;
   if (tab === "buddha") return BUDDHA_SUGGESTED_QUESTIONS;
+  if (tab === "christ") return CHRISTIANITY_SUGGESTED_QUESTIONS;
+  if (tab === "quran") return QURAN_SUGGESTED_QUESTIONS;
+  if (tab === "jain") return JAINISM_SUGGESTED_QUESTIONS;
   return SUGGESTED_QUESTIONS;
 }
 
@@ -38,6 +44,9 @@ function getStats(tab: TabId) {
   if (tab === "gita") return GITA_KNOWLEDGE_STATS;
   if (tab === "veda") return VEDA_KNOWLEDGE_STATS;
   if (tab === "buddha") return BUDDHA_STATS;
+  if (tab === "christ") return CHRISTIANITY_KNOWLEDGE_STATS;
+  if (tab === "quran") return QURAN_KNOWLEDGE_STATS;
+  if (tab === "jain") return JAINISM_KNOWLEDGE_STATS;
   return SHIV_STATS;
 }
 
