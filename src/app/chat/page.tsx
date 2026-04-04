@@ -10,6 +10,9 @@ import { CHRISTIANITY_SUGGESTED_QUESTIONS } from "@/lib/christianity-knowledge";
 import { QURAN_SUGGESTED_QUESTIONS } from "@/lib/quran-knowledge";
 import { JAINISM_SUGGESTED_QUESTIONS } from "@/lib/jainism-knowledge";
 import { ALL_KNOWLEDGE_SUGGESTED_QUESTIONS } from "@/lib/all-knowledge";
+import { SIKH_SUGGESTED_QUESTIONS } from "@/lib/sikh-knowledge";
+import { TORAH_SUGGESTED_QUESTIONS } from "@/lib/torah-knowledge";
+import { TAO_SUGGESTED_QUESTIONS } from "@/lib/tao-knowledge";
 import { TABS, TabId } from "@/lib/tab-config";
 
 type Message = { role: "user" | "assistant"; content: string };
