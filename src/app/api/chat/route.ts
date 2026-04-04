@@ -6,6 +6,9 @@ import { CHRISTIANITY_SYSTEM_PROMPT } from "@/lib/christianity-knowledge";
 import { QURAN_SYSTEM_PROMPT } from "@/lib/quran-knowledge";
 import { JAINISM_SYSTEM_PROMPT } from "@/lib/jainism-knowledge";
 import { ALL_KNOWLEDGE_SYSTEM_PROMPT } from "@/lib/all-knowledge";
+import { SIKH_SYSTEM_PROMPT } from "@/lib/sikh-knowledge";
+import { TORAH_SYSTEM_PROMPT } from "@/lib/torah-knowledge";
+import { TAO_SYSTEM_PROMPT } from "@/lib/tao-knowledge";
 
 export const runtime = "edge";
 
@@ -22,6 +25,9 @@ function getSystemPrompt(tab: string): string {
   if (tab === "christ") return CHRISTIANITY_SYSTEM_PROMPT;
   if (tab === "quran") return QURAN_SYSTEM_PROMPT;
   if (tab === "jain") return JAINISM_SYSTEM_PROMPT;
+  if (tab === "sikh") return SIKH_SYSTEM_PROMPT;
+  if (tab === "torah") return TORAH_SYSTEM_PROMPT;
+  if (tab === "tao") return TAO_SYSTEM_PROMPT;
   if (tab === "all") return ALL_KNOWLEDGE_SYSTEM_PROMPT;
   return SHIVA_SYSTEM_PROMPT;
 }
@@ -92,7 +98,7 @@ export async function POST(request: Request) {
   try {
     const { messages, tab = "shiv" }: { messages: ChatMessage[]; tab?: string } = await request.json();
 
-    const validTab: string = ["shiv", "gita", "veda", "buddha", "christ", "quran", "jain", "all"].includes(tab) ? tab : "shiv";
+    const validTab: string = ["shiv", "gita", "veda", "buddha", "christ", "quran", "jain", "sikh", "torah", "tao", "all"].includes(tab) ? tab : "shiv";
     const latestQuestion = messages.filter((m) => m.role === "user").pop()?.content || "";
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
