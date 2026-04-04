@@ -96,6 +96,36 @@ body {
   --tab-glow-soft: rgba(255, 69, 0, 0.3);
   --tab-border: rgba(255, 69, 0, 0.15);
 }
+[data-tab="sikh"] {
+  --tab-primary: #FF6B00;
+  --tab-primary-light: #FF8534;
+  --tab-primary-dark: #E05E00;
+  --tab-secondary: #FFA500;
+  --tab-glow: rgba(255, 107, 0, 0.5);
+  --tab-glow-soft: rgba(255, 107, 0, 0.3);
+  --tab-border: rgba(255, 107, 0, 0.15);
+}
+
+[data-tab="torah"] {
+  --tab-primary: #1E40AF;
+  --tab-primary-light: #3B82F6;
+  --tab-primary-dark: #1E3A8A;
+  --tab-secondary: #60A5FA;
+  --tab-glow: rgba(30, 64, 175, 0.5);
+  --tab-glow-soft: rgba(30, 64, 175, 0.3);
+  --tab-border: rgba(30, 64, 175, 0.15);
+}
+
+[data-tab="tao"] {
+  --tab-primary: #047857;
+  --tab-primary-light: #10B981;
+  --tab-primary-dark: #065F46;
+  --tab-secondary: #34D399;
+  --tab-glow: rgba(4, 120, 87, 0.5);
+  --tab-glow-soft: rgba(4, 120, 87, 0.3);
+  --tab-border: rgba(4, 120, 87, 0.15);
+}
+
 [data-tab="all"] {
   --tab-primary: #9333EA;
   --tab-primary-light: #A855F7;
