@@ -15,7 +15,24 @@ import { TORAH_SUGGESTED_QUESTIONS } from "@/lib/torah-knowledge";
 import { TAO_SUGGESTED_QUESTIONS } from "@/lib/tao-knowledge";
 import { TABS, TabId } from "@/lib/tab-config";
 
-type Message = { role: "user" | "assistant"; content: string };
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+  // Set when the assistant message is the partial result of a stream that
+  // was interrupted, so the UI can offer a retry/continue affordance.
+  partial?: boolean;
+  errorReason?: string;
+};
+
+// The server emits zero-width spaces as keepalive heartbeats. They're
+// invisible visually but they make string operations (length, copy, share)
+// look weird, so we strip them client-side before display/persistence.
+const HEARTBEAT_REGEX = /​/g;
+const stripHeartbeats = (s: string) => s.replace(HEARTBEAT_REGEX, "");
+
+// If no content delta arrives for this long, we treat the connection as
+// stalled and surface a partial-response error to the user.
+const CLIENT_IDLE_TIMEOUT_MS = 45_000;
 
 function getQuestions(tab: TabId) {
   switch (tab) {
@@ -100,6 +117,17 @@ function ChatContent() {
     setMessages((prev) => [...prev, { role: "user", content: text.trim() }]);
     scrollToBottom();
 
+    const abortController = new AbortController();
+    let idleTimer: ReturnType<typeof setTimeout> | null = null;
+    let fullContent = "";
+
+    const resetIdleTimer = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        abortController.abort(new DOMException("client-idle-timeout", "AbortError"));
+      }, CLIENT_IDLE_TIMEOUT_MS);
+    };
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -108,41 +136,83 @@ function ChatContent() {
           messages: [...messages, { role: "user" as const, content: text.trim() }],
           tab: tabOverride || activeTab,
         }),
+        signal: abortController.signal,
       });
 
-      if (!response.ok) throw new Error("Failed to get response");
+      if (!response.ok) throw new Error(`Server returned ${response.status}`);
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
-      let fullContent = "";
+      resetIdleTimer();
 
       if (reader) {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          const chunk = decoder.decode(value);
-          fullContent += chunk;
-          setStreamingContent(fullContent);
-          scrollToBottom();
+          const chunk = stripHeartbeats(decoder.decode(value, { stream: true }));
+          if (chunk) {
+            fullContent += chunk;
+            setStreamingContent(fullContent);
+            scrollToBottom();
+            resetIdleTimer();
+          }
         }
       }
 
+      if (idleTimer) clearTimeout(idleTimer);
       setMessages((prev) => [...prev, { role: "assistant", content: fullContent }]);
       setStreamingContent("");
     } catch (error) {
-      console.error("Error:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "I apologize, but I encountered an error. Please try again.",
-        },
-      ]);
+      if (idleTimer) clearTimeout(idleTimer);
+      console.error("Stream error:", error);
+
+      const isAbort = error instanceof DOMException && error.name === "AbortError";
+      const reason = isAbort
+        ? "Stream went idle — connection timed out before completing."
+        : error instanceof Error
+          ? error.message
+          : "Unexpected error";
+
+      // Preserve whatever already streamed in. Only synthesize an error
+      // bubble when truly nothing was received.
+      if (fullContent.trim().length > 0) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: fullContent, partial: true, errorReason: reason },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: `Sorry, the response could not be generated. ${reason}`,
+            partial: true,
+            errorReason: reason,
+          },
+        ]);
+      }
+      setStreamingContent("");
     } finally {
       setLoading(false);
     }
-  }, [activeTab]);
+  }, [activeTab, messages]);
+
+  const retryLastQuestion = useCallback(() => {
+    // Find the last user message and replay it; drop any failed assistant
+    // turn that came after it so the retry is clean.
+    let lastUser: string | null = null;
+    let trimmedMessages: Message[] = [];
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === "user") {
+        lastUser = messages[i].content;
+        trimmedMessages = messages.slice(0, i);
+        break;
+      }
+    }
+    if (!lastUser) return;
+    setMessages(trimmedMessages);
+    void sendMessage(lastUser, activeTab);
+  }, [messages, sendMessage, activeTab]);
 
   // Auto-send initial query
   useEffect(() => {
@@ -272,6 +342,32 @@ function ChatContent() {
                     <div className="text-sm md:text-base text-gray-200 leading-relaxed">
                       {formatMessage(msg.content)}
                     </div>
+                    {msg.partial && (
+                      <div
+                        className="mt-3 rounded-xl px-3 py-2 text-xs flex items-center justify-between gap-3"
+                        style={{
+                          background: "rgba(255, 165, 0, 0.08)",
+                          border: "1px solid rgba(255, 165, 0, 0.25)",
+                          color: "#fbbf24",
+                        }}
+                        role="alert"
+                      >
+                        <span>
+                          Stream ended early.
+                          {msg.errorReason ? <span className="opacity-70"> {msg.errorReason}</span> : null}
+                        </span>
+                        <button
+                          onClick={retryLastQuestion}
+                          className="text-xs px-3 py-1 rounded-full font-medium transition-all hover:scale-105"
+                          style={{
+                            background: "linear-gradient(135deg, var(--tab-primary), var(--tab-primary-dark))",
+                            color: "white",
+                          }}
+                        >
+                          Retry
+                        </button>
+                      </div>
+                    )}
                     {/* Share & Export buttons */}
                     <div className="flex gap-2 mt-4 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                       <button
