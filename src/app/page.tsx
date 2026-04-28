@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { SUGGESTED_QUESTIONS } from "@/lib/shiva-knowledge";
 import { GITA_SUGGESTED_QUESTIONS, GITA_KNOWLEDGE_STATS } from "@/lib/gita-knowledge";
 import { VEDA_SUGGESTED_QUESTIONS, VEDA_KNOWLEDGE_STATS } from "@/lib/veda-knowledge";
@@ -35,40 +36,106 @@ const BUDDHA_STATS = [
 ];
 
 function getQuestions(tab: TabId) {
-  if (tab === "gita") return GITA_SUGGESTED_QUESTIONS;
-  if (tab === "veda") return VEDA_SUGGESTED_QUESTIONS;
-  if (tab === "buddha") return BUDDHA_SUGGESTED_QUESTIONS;
-  if (tab === "christ") return CHRISTIANITY_SUGGESTED_QUESTIONS;
-  if (tab === "quran") return QURAN_SUGGESTED_QUESTIONS;
-  if (tab === "jain") return JAINISM_SUGGESTED_QUESTIONS;
-  if (tab === "sikh") return SIKH_SUGGESTED_QUESTIONS;
-    if (tab === "torah") return TORAH_SUGGESTED_QUESTIONS;
-    if (tab === "tao") return TAO_SUGGESTED_QUESTIONS;
-    if (tab === "all") return ALL_KNOWLEDGE_SUGGESTED_QUESTIONS;
-  return SUGGESTED_QUESTIONS;
+  switch (tab) {
+    case "gita": return GITA_SUGGESTED_QUESTIONS;
+    case "veda": return VEDA_SUGGESTED_QUESTIONS;
+    case "buddha": return BUDDHA_SUGGESTED_QUESTIONS;
+    case "christ": return CHRISTIANITY_SUGGESTED_QUESTIONS;
+    case "quran": return QURAN_SUGGESTED_QUESTIONS;
+    case "jain": return JAINISM_SUGGESTED_QUESTIONS;
+    case "sikh": return SIKH_SUGGESTED_QUESTIONS;
+    case "torah": return TORAH_SUGGESTED_QUESTIONS;
+    case "tao": return TAO_SUGGESTED_QUESTIONS;
+    case "all": return ALL_KNOWLEDGE_SUGGESTED_QUESTIONS;
+    default: return SUGGESTED_QUESTIONS;
+  }
 }
 
 function getStats(tab: TabId) {
-  if (tab === "gita") return GITA_KNOWLEDGE_STATS;
-  if (tab === "veda") return VEDA_KNOWLEDGE_STATS;
-  if (tab === "buddha") return BUDDHA_STATS;
-  if (tab === "christ") return CHRISTIANITY_KNOWLEDGE_STATS;
-  if (tab === "quran") return QURAN_KNOWLEDGE_STATS;
-  if (tab === "jain") return JAINISM_KNOWLEDGE_STATS;
-  if (tab === "sikh") return SIKH_STATS;
-    if (tab === "torah") return TORAH_STATS;
-    if (tab === "tao") return TAO_STATS;
-    if (tab === "all") return ALL_KNOWLEDGE_STATS;
-  return SHIV_STATS;
+  switch (tab) {
+    case "gita": return GITA_KNOWLEDGE_STATS;
+    case "veda": return VEDA_KNOWLEDGE_STATS;
+    case "buddha": return BUDDHA_STATS;
+    case "christ": return CHRISTIANITY_KNOWLEDGE_STATS;
+    case "quran": return QURAN_KNOWLEDGE_STATS;
+    case "jain": return JAINISM_KNOWLEDGE_STATS;
+    case "sikh": return SIKH_STATS;
+    case "torah": return TORAH_STATS;
+    case "tao": return TAO_STATS;
+    case "all": return ALL_KNOWLEDGE_STATS;
+    default: return SHIV_STATS;
+  }
 }
 
-export default function Home() {
+const VALID_TABS = new Set<TabId>([
+  "shiv", "gita", "veda", "buddha", "christ", "quran",
+  "jain", "sikh", "torah", "tao", "all",
+]);
+
+function isValidTab(t: string | null): t is TabId {
+  return t !== null && VALID_TABS.has(t as TabId);
+}
+
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const initialTab: TabId = isValidTab(searchParams.get("tab"))
+    ? (searchParams.get("tab") as TabId)
+    : "shiv";
+
   const [query, setQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<TabId>("shiv");
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
 
   const tab = getTabConfig(activeTab);
   const questions = getQuestions(activeTab);
   const stats = getStats(activeTab);
+
+  // Stable particle positions: generated once per mount (avoids hydration mismatch + jitter on re-render).
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 20 }, () => ({
+        size: Math.random() * 4 + 2,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        opacity: 0.2 + Math.random() * 0.3,
+        delay: Math.random() * 6,
+        duration: 4 + Math.random() * 4,
+      })),
+    []
+  );
+
+  // Sync URL ?tab= with active tab (so users can share/bookmark a specific tradition).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    const current = url.searchParams.get("tab");
+    if (current === activeTab) return;
+    if (activeTab === "shiv") {
+      url.searchParams.delete("tab");
+    } else {
+      url.searchParams.set("tab", activeTab);
+    }
+    window.history.replaceState({}, "", url.toString());
+  }, [activeTab]);
+
+  // Update document title per tab.
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.title = `${tab.name} — ${tab.tagline}`;
+    }
+  }, [tab.name, tab.tagline]);
+
+  // Browser back/forward should update the active tab too.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onPop = () => {
+      const url = new URL(window.location.href);
+      const t = url.searchParams.get("tab");
+      if (isValidTab(t)) setActiveTab(t);
+      else setActiveTab("shiv");
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   const handleAsk = (question?: string) => {
     const q = question || query;
@@ -78,20 +145,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden" data-tab={activeTab}>
-      {/* Cosmic background particles */}
-      <div className="fixed inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+      {/* Cosmic background particles (deterministic-per-mount) */}
+      <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
+        {particles.map((p, i) => (
           <div
             key={i}
             className="absolute rounded-full animate-float"
             style={{
-              width: `${Math.random() * 4 + 2}px`,
-              height: `${Math.random() * 4 + 2}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              background: `rgba(255, ${107 + Math.random() * 50}, 0, ${0.2 + Math.random() * 0.3})`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${4 + Math.random() * 4}s`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              background: `var(--tab-glow, rgba(255, 107, 0, ${p.opacity}))`,
+              opacity: p.opacity,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
             }}
           />
         ))}
@@ -109,13 +177,18 @@ export default function Home() {
         </div>
 
         {/* Tab Switcher */}
-        <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800 max-w-[90vw] scrollbar-hide">
+        <nav
+          className="flex items-center gap-1 md:gap-2 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800 max-w-[90vw] scrollbar-hide"
+          aria-label="Choose a wisdom tradition"
+        >
           {(Object.keys(TABS) as TabId[]).map((t) => (
             <button
               key={t}
               onClick={() => setActiveTab(t)}
               className={`tab-btn ${activeTab === t ? "active" : ""}`}
               data-tab={t}
+              aria-pressed={activeTab === t}
+              aria-label={TABS[t].name}
             >
               <span className="mr-1.5">{TABS[t].symbol}</span>
               {TABS[t].name}
@@ -160,6 +233,7 @@ export default function Home() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAsk()}
               placeholder={tab.placeholder}
+              aria-label={`Ask ${tab.name}`}
               className="flex-1 bg-transparent px-4 py-3 text-white placeholder-gray-500 outline-none text-base md:text-lg"
               style={{ fontFamily: "'Inter', sans-serif" }}
             />
@@ -228,5 +302,17 @@ export default function Home() {
         </p>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center text-gray-400">
+        Loading…
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }

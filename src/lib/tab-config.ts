@@ -140,8 +140,8 @@ export const TABS: Record<TabId, TabConfig> = {
   },
   sikh: {
     id: "sikh",
-    name: "Sikh",
-    domain: "shiv.ai",
+    name: "Sikh.ai",
+    domain: "sikh.ai",
     symbol: "\u{1F64F}",
     tagline: "The Complete Guru Granth Sahib Wisdom Library",
     subtitle: "Sikh spiritual wisdom from the Guru Granth Sahib",
@@ -157,8 +157,8 @@ export const TABS: Record<TabId, TabConfig> = {
   },
   torah: {
     id: "torah",
-    name: "Torah",
-    domain: "shiv.ai",
+    name: "Torah.ai",
+    domain: "torah.ai",
     symbol: "\u2721",
     tagline: "The Complete Jewish Wisdom & Torah Knowledge Library",
     subtitle: "3,500+ years of Jewish wisdom and Torah teachings",
@@ -174,8 +174,8 @@ export const TABS: Record<TabId, TabConfig> = {
   },
   tao: {
     id: "tao",
-    name: "Tao",
-    domain: "shiv.ai",
+    name: "Tao.ai",
+    domain: "tao.ai",
     symbol: "\u262F",
     tagline: "The Complete Taoist & Eastern Philosophy Library",
     subtitle: "Ancient Chinese wisdom from Lao Tzu, Confucius & the I Ching",
@@ -192,7 +192,7 @@ export const TABS: Record<TabId, TabConfig> = {
   all: {
     id: "all",
     name: "All Wisdom",
-    domain: "shiv.ai",
+    domain: "wisdom.ai",
     symbol: "🌍",
     tagline: "The Universal Multi-Faith Wisdom Library",
     subtitle: "Combined wisdom from all spiritual traditions",
