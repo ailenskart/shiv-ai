@@ -7,7 +7,19 @@ export const runtime = "edge";
 // GET /api/knowledge?source=shiv — List entries for a source
 // DELETE /api/knowledge?id=123 — Remove an entry
 
-const UPLOAD_SECRET = process.env.KNOWLEDGE_UPLOAD_SECRET || "shiv-ai-upload-2024";
+const UPLOAD_SECRET = process.env.KNOWLEDGE_UPLOAD_SECRET;
+
+const VALID_SOURCES = [
+  "shiv", "gita", "veda", "buddha", "christ", "quran",
+  "jain", "sikh", "torah", "tao", "all",
+] as const;
+
+function isAuthorized(request: Request): boolean {
+  // Require KNOWLEDGE_UPLOAD_SECRET to be set in env. Reject all requests if not.
+  if (!UPLOAD_SECRET) return false;
+  const header = request.headers.get("x-upload-secret") || "";
+  return header === UPLOAD_SECRET;
+}
 
 function getSupabaseConfig() {
   const supabaseUrl = process.env.SUPABASE_URL;
@@ -29,8 +41,7 @@ function supabaseHeaders(key: string) {
 // POST: Add a knowledge entry
 export async function POST(request: Request) {
   try {
-    const authHeader = request.headers.get("x-upload-secret") || "";
-    if (authHeader !== UPLOAD_SECRET) {
+    if (!isAuthorized(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -44,9 +55,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!["shiv", "gita", "veda"].includes(source)) {
+    if (!VALID_SOURCES.includes(source)) {
       return NextResponse.json(
-        { error: "source must be one of: shiv, gita, veda" },
+        { error: `source must be one of: ${VALID_SOURCES.join(", ")}` },
         { status: 400 }
       );
     }
@@ -78,8 +89,7 @@ export async function POST(request: Request) {
 // GET: List knowledge entries
 export async function GET(request: Request) {
   try {
-    const authHeader = request.headers.get("x-upload-secret") || "";
-    if (authHeader !== UPLOAD_SECRET) {
+    if (!isAuthorized(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -89,7 +99,7 @@ export async function GET(request: Request) {
     const { supabaseUrl, supabaseKey } = getSupabaseConfig();
 
     let url = `${supabaseUrl}/rest/v1/knowledge_entries?select=id,source,title,category,created_at&order=created_at.desc&limit=200`;
-    if (source && ["shiv", "gita", "veda"].includes(source)) {
+    if (source && (VALID_SOURCES as readonly string[]).includes(source)) {
       url += `&source=eq.${source}`;
     }
 
@@ -112,8 +122,7 @@ export async function GET(request: Request) {
 // DELETE: Remove a knowledge entry
 export async function DELETE(request: Request) {
   try {
-    const authHeader = request.headers.get("x-upload-secret") || "";
-    if (authHeader !== UPLOAD_SECRET) {
+    if (!isAuthorized(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
