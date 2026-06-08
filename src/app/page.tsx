@@ -110,7 +110,7 @@ export default function Home() {
         </div>
 
         {/* Tab Switcher - Desktop */}
-        <nav className="hidden md:flex items-center gap-2 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800 max-w-[90vw] scrollbar-hide">
+        <nav className="hidden md:flex items-center gap-1 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-1.5 py-1.5 border border-gray-800 max-w-[calc(100vw-200px)] scrollbar-hide">
           {(Object.keys(TABS) as TabId[]).map((t) => (
             <button
               key={t}
@@ -157,10 +157,10 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-12 md:pt-20 pb-12">
+      <main className="relative z-10 flex flex-col items-center justify-center px-4 md:px-6 pt-8 md:pt-20 pb-8 md:pb-12">
         {/* Symbol */}
         <div
-          className="text-8xl md:text-9xl mb-6 om-glow animate-pulse-glow rounded-full w-40 h-40 md:w-48 md:h-48 flex items-center justify-center"
+          className="text-6xl md:text-9xl mb-4 md:mb-6 om-glow animate-pulse-glow rounded-full w-28 h-28 md:w-48 md:h-48 flex items-center justify-center"
           style={{
             fontFamily: "'Cinzel', serif",
             background: `radial-gradient(circle, var(--tab-glow-soft, rgba(255,107,0,0.1)) 0%, transparent 70%)`,
@@ -170,7 +170,7 @@ export default function Home() {
         </div>
 
         <h1
-          className="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-4 gradient-text"
+          className="text-3xl md:text-6xl lg:text-7xl font-bold text-center mb-3 md:mb-4 gradient-text"
           style={{ fontFamily: "'Cinzel', serif" }}
         >
           {tab.name}
@@ -179,12 +179,12 @@ export default function Home() {
         <p className="text-lg md:text-xl text-gray-400 text-center max-w-2xl mb-2">
           {tab.tagline}
         </p>
-        <p className="text-sm md:text-base text-gray-500 text-center max-w-xl mb-12">
+        <p className="text-sm md:text-base text-gray-500 text-center max-w-xl mb-8 md:mb-12">
           {tab.subtitle}
         </p>
 
         {/* Search / Ask Box */}
-        <div className="w-full max-w-2xl mb-16">
+        <div className="w-full max-w-2xl mb-10 md:mb-16">
           <div className="glass rounded-2xl p-2 flex items-center gap-2 animate-pulse-glow">
             <input
               type="text"
@@ -227,7 +227,7 @@ export default function Home() {
         </div>
 
         {/* Knowledge Stats */}
-        <div className="w-full max-w-4xl mt-24 mb-12">
+        <div className="w-full max-w-4xl mt-16 md:mt-24 mb-8 md:mb-12">
           <h2
             className="text-2xl md:text-3xl font-bold text-center mb-12 gradient-text"
             style={{ fontFamily: "'Cinzel', serif" }}
