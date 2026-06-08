@@ -64,7 +64,8 @@ function getStats(tab: TabId) {
 
 export default function Home() {
   const [query, setQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<TabId>("shiv");
+  const [activeTab, setActiveTab] = useState<TabId>("all");
+  const [showMobileTabs, setShowMobileTabs] = useState(false);
 
   const tab = getTabConfig(activeTab);
   const questions = getQuestions(activeTab);
@@ -108,8 +109,8 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Tab Switcher */}
-        <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800 max-w-[90vw] scrollbar-hide">
+        {/* Tab Switcher - Desktop */}
+        <nav className="hidden md:flex items-center gap-2 overflow-x-auto bg-[rgba(26,26,46,0.8)] rounded-full px-2 py-1.5 border border-gray-800 max-w-[90vw] scrollbar-hide">
           {(Object.keys(TABS) as TabId[]).map((t) => (
             <button
               key={t}
@@ -122,6 +123,37 @@ export default function Home() {
             </button>
           ))}
         </nav>
+
+        {/* Tab Switcher - Mobile */}
+        <div className="md:hidden w-full relative">
+          <button
+            onClick={() => setShowMobileTabs(!showMobileTabs)}
+            className="w-full flex items-center justify-between bg-[rgba(26,26,46,0.8)] rounded-xl px-4 py-3 border border-gray-800"
+          >
+            <span className="flex items-center gap-2 text-white font-medium">
+              <span className="text-lg">{tab.symbol}</span>
+              {tab.name}
+            </span>
+            <svg className={`w-5 h-5 text-gray-400 transition-transform ${showMobileTabs ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {showMobileTabs && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[rgba(20,20,40,0.95)] backdrop-blur-xl rounded-2xl border border-gray-700 p-3 z-50 grid grid-cols-3 gap-2 shadow-2xl">
+              {(Object.keys(TABS) as TabId[]).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => { setActiveTab(t); setShowMobileTabs(false); }}
+                  className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${activeTab === t ? "bg-[var(--tab-primary)] text-white shadow-lg" : "bg-[rgba(255,255,255,0.05)] text-gray-300 hover:bg-[rgba(255,255,255,0.1)]"}`}
+                  data-tab={t}
+                >
+                  <span className="text-2xl">{TABS[t].symbol}</span>
+                  <span className="text-xs font-medium truncate w-full text-center">{TABS[t].name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Hero Section */}
