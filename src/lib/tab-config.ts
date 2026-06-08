@@ -1,4 +1,4 @@
-export type TabId = "shiv" | "gita" | "veda" | "buddha" | "christ" | "quran" | "jain" | "sikh" | "torah" | "tao" | "all";
+export type TabId = "all" | "shiv" | "gita" | "veda" | "buddha" | "christ" | "quran" | "jain" | "sikh" | "torah" | "tao";
 
 export interface TabConfig {
   id: TabId;
@@ -19,6 +19,23 @@ export interface TabConfig {
 }
 
 export const TABS: Record<TabId, TabConfig> = {
+  all: {
+    id: "all",
+    name: "All Wisdom",
+    domain: "shiv.ai",
+    symbol: "🌍",
+    tagline: "The Universal Multi-Faith Wisdom Library",
+    subtitle: "Combined wisdom from all spiritual traditions",
+    placeholder: "Ask anything and receive wisdom drawn from all the world's great spiritual traditions",
+    buttonLabel: "Seek Universal Wisdom",
+    footerMantra: "🕉️ Wisdom is One, Paths are Many 🕉️",
+    footerText: "Drawing from 7+ spiritual traditions spanning 5000+ years of wisdom",
+    exploreLabel: "Explore Universal Wisdom",
+    chatSubtitle: "Ask anything and receive wisdom from all traditions",
+    inputPlaceholder: "Ask anything and receive wisdom drawn from all the world's great spiritual traditions",
+    sourceLine: "Source: All Sacred Texts & Traditions Combined",
+    color: "#9333EA",
+  },
   shiv: {
     id: "shiv",
     name: "Shiv.ai",
@@ -189,23 +206,7 @@ export const TABS: Record<TabId, TabConfig> = {
     sourceLine: "Sources: Tao Te Ching, Zhuangzi, Analects, I Ching",
     color: "#047857",
   },
-  all: {
-    id: "all",
-    name: "All Wisdom",
-    domain: "shiv.ai",
-    symbol: "🌍",
-    tagline: "The Universal Multi-Faith Wisdom Library",
-    subtitle: "Combined wisdom from all spiritual traditions",
-    placeholder: "Ask anything and receive wisdom drawn from all the world's great spiritual traditions",
-    buttonLabel: "Seek Universal Wisdom",
-    footerMantra: "🕉️ Wisdom is One, Paths are Many 🕉️",
-    footerText: "Drawing from 7+ spiritual traditions spanning 5000+ years of wisdom",
-    exploreLabel: "Explore Universal Wisdom",
-    chatSubtitle: "Ask anything and receive wisdom from all traditions",
-    inputPlaceholder: "Ask anything and receive wisdom drawn from all the world's great spiritual traditions",
-    sourceLine: "Source: All Sacred Texts & Traditions Combined",
-    color: "#9333EA",
-  },
+
 };
 
 export function getTabConfig(tab: TabId): TabConfig {
