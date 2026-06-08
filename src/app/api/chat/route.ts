@@ -17,6 +17,7 @@ interface ChatMessage {
   content: string;
 }
 
+const WISDOM_SEARCH_URL = "https://adrisbzrtlkoeqmzkbsz.supabase.co/functions/v1/wisdom-search";
 
 function getSystemPrompt(tab: string): string {
   if (tab === "gita") return GITA_SYSTEM_PROMPT;
@@ -32,6 +33,30 @@ function getSystemPrompt(tab: string): string {
   return SHIVA_SYSTEM_PROMPT;
 }
 
+// RAG: Search sacred texts via vector similarity
+async function getWisdomContext(question: string, tab: string): Promise<string> {
+  try {
+    const tradition = tab === "all" ? null : tab;
+    const res = await fetch(WISDOM_SEARCH_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, tradition, top_k: 6 }),
+    });
+
+    if (!res.ok) {
+      console.error("Wisdom search error:", res.status);
+      return "";
+    }
+
+    const data = await res.json();
+    return data.wisdom_context || "";
+  } catch (e) {
+    console.error("Wisdom search failed:", e);
+    return "";
+  }
+}
+
+// Legacy: fetch from knowledge_entries table
 async function getEnhancedSystemPrompt(tab: string): Promise<string> {
   const base = getSystemPrompt(tab);
   try {
@@ -110,15 +135,25 @@ export async function POST(request: Request) {
 
     logQuery(latestQuestion, provider, validTab, request);
 
-    const systemPrompt = await getEnhancedSystemPrompt(validTab);
+    // Fetch both in parallel: base system prompt + RAG wisdom context
+    const [systemPrompt, wisdomContext] = await Promise.all([
+      getEnhancedSystemPrompt(validTab),
+      getWisdomContext(latestQuestion, validTab),
+    ]);
 
-    // Append formatting rules to reduce excessive markdown
-    const formattedPrompt = systemPrompt + "\n\nIMPORTANT FORMATTING RULES: Write in natural, flowing prose. Do NOT use excessive bold (**text**) formatting. Do NOT use bullet points or numbered lists unless the user specifically asks for a list. Avoid markdown headers. Keep your tone warm, conversational, and wise — like a teacher speaking to a student, not a textbook. Use short paragraphs instead of lists. Only use bold sparingly for sacred text names or key Sanskrit/Arabic/Pali terms, not for every concept.";
+    // Build the final prompt: base knowledge + RAG passages + formatting rules
+    let finalPrompt = systemPrompt;
+
+    if (wisdomContext) {
+      finalPrompt += "\n\n" + wisdomContext;
+    }
+
+    finalPrompt += "\n\nIMPORTANT FORMATTING RULES: Write in natural, flowing prose. Do NOT use excessive bold (**text**) formatting. Do NOT use bullet points or numbered lists unless the user specifically asks for a list. Avoid markdown headers. Keep your tone warm, conversational, and wise \u2014 like a teacher speaking to a student, not a textbook. Use short paragraphs instead of lists. Only use bold sparingly for sacred text names or key Sanskrit/Arabic/Pali terms, not for every concept.";
 
     if (anthropicKey) {
-      return streamFromAnthropic(messages, anthropicKey, formattedPrompt);
+      return streamFromAnthropic(messages, anthropicKey, finalPrompt);
     } else if (openaiKey) {
-      return streamFromOpenAI(messages, openaiKey, formattedPrompt);
+      return streamFromOpenAI(messages, openaiKey, finalPrompt);
     } else {
       return generateFallbackResponse(messages, validTab);
     }
@@ -251,11 +286,11 @@ function generateFallbackResponse(messages: ChatMessage[], tab: string): Respons
     shiv: `## Welcome to Shiv.ai\n\nI am **Shiv.ai**, the world's largest Shiva knowledge library. Please ensure the API key is configured for full AI-powered responses.\n\nOm Namah Shivaya`,
     gita: `## Welcome to Gita.ai\n\nI am **Gita.ai**, dedicated to the timeless wisdom of the Bhagavad Gita. Please ensure the API key is configured for full AI-powered responses.\n\nJai Shri Krishna`,
     veda: `## Welcome to Veda.ai\n\nI am **Veda.ai**, the most comprehensive Vedic knowledge system ever created. Please ensure the API key is configured for full AI-powered responses.\n\nOm`,
-      buddha: "Namo Buddhaya \u2638\uFE0F The path to understanding begins with the Four Noble Truths. Buddhism teaches that suffering (dukkha) can be understood, its causes addressed, and liberation achieved through the Noble Eightfold Path. How may I illuminate the Dharma for you?",
+    buddha: "Namo Buddhaya \u2638\uFE0F The path to understanding begins with the Four Noble Truths. Buddhism teaches that suffering (dukkha) can be understood, its causes addressed, and liberation achieved through the Noble Eightfold Path. How may I illuminate the Dharma for you?",
     christ: "Peace be with you \u271D\uFE0F Christ.ai is the comprehensive Christian wisdom library. The teachings of Jesus Christ emphasize love, grace, forgiveness, and the Kingdom of God. How may I illuminate Scripture for you?",
     quran: "Bismillah ir-Rahman ir-Rahim \u262A\uFE0F Quran.ai is the comprehensive Islamic knowledge library. The Holy Quran is the divine guidance for all humanity. How may I share the wisdom of the Quran with you?",
     jain: "Jai Jinendra \uD83D\uDD49\uFE0F Jain.ai is the comprehensive Jain wisdom library. The path of Ahimsa (non-violence) and the teachings of the 24 Tirthankaras guide us toward liberation. How may I share Jain wisdom with you?",
-    all: "Welcome to the Universal Wisdom Library \uD83C\uDF0D All the world's great spiritual traditions unite here. From the Vedas to the Bible, from the Quran to the teachings of Buddha and Mahavira — ask anything and receive wisdom drawn from all faiths. How may universal wisdom guide you today?",
+    all: "Welcome to the Universal Wisdom Library \uD83C\uDF0D All the world's great spiritual traditions unite here. From the Vedas to the Bible, from the Quran to the teachings of Buddha and Mahavira \u2014 ask anything and receive wisdom drawn from all faiths. How may universal wisdom guide you today?",
   };
 
   const response = fallbacks[tab] || fallbacks.shiv;
