@@ -2,36 +2,36 @@
 
 import { useState } from "react";
 import { SUGGESTED_QUESTIONS } from "@/lib/shiva-knowledge";
-import { GITA_SUGGESTED_QUESTIONS, GITA_KNOWLEDGE_STATS } from "@/lib/gita-knowledge";
-import { VEDA_SUGGESTED_QUESTIONS, VEDA_KNOWLEDGE_STATS } from "@/lib/veda-knowledge";
+import { GITA_SUGGESTED_QUESTIONS } from "@/lib/gita-knowledge";
+import { VEDA_SUGGESTED_QUESTIONS } from "@/lib/veda-knowledge";
 import { BUDDHA_SUGGESTED_QUESTIONS } from "@/lib/buddha-knowledge";
-import { CHRISTIANITY_SUGGESTED_QUESTIONS, CHRISTIANITY_KNOWLEDGE_STATS } from "@/lib/christianity-knowledge";
-import { QURAN_SUGGESTED_QUESTIONS, QURAN_KNOWLEDGE_STATS } from "@/lib/quran-knowledge";
-import { JAINISM_SUGGESTED_QUESTIONS, JAINISM_KNOWLEDGE_STATS } from "@/lib/jainism-knowledge";
-import { ALL_KNOWLEDGE_SUGGESTED_QUESTIONS, ALL_KNOWLEDGE_STATS } from "@/lib/all-knowledge";
-import { SIKH_SUGGESTED_QUESTIONS, SIKH_STATS } from "@/lib/sikh-knowledge";
-import { TORAH_SUGGESTED_QUESTIONS, TORAH_STATS } from "@/lib/torah-knowledge";
-import { TAO_SUGGESTED_QUESTIONS, TAO_STATS } from "@/lib/tao-knowledge";
+import { CHRISTIANITY_SUGGESTED_QUESTIONS } from "@/lib/christianity-knowledge";
+import { QURAN_SUGGESTED_QUESTIONS } from "@/lib/quran-knowledge";
+import { JAINISM_SUGGESTED_QUESTIONS } from "@/lib/jainism-knowledge";
+import { SIKH_SUGGESTED_QUESTIONS } from "@/lib/sikh-knowledge";
+import { TORAH_SUGGESTED_QUESTIONS } from "@/lib/torah-knowledge";
+import { TAO_SUGGESTED_QUESTIONS } from "@/lib/tao-knowledge";
 import { TabId, TABS, getTabConfig } from "@/lib/tab-config";
 
-const SHIV_STATS = [
-  { number: "28+", label: "Shaiva Agamas" },
-  { number: "12", label: "Jyotirlingas" },
-  { number: "63", label: "Nayanar Saints" },
-  { number: "112", label: "Meditation Techniques" },
-  { number: "1000+", label: "Years of Tradition" },
-  { number: "8+", label: "Philosophical Schools" },
-  { number: "108", label: "Sacred Names" },
-  { number: "∞", label: "Dimensions of Shiva" },
+/* Happiness-first suggested questions (for "All" tab) */
+const HAPPINESS_QUESTIONS = [
+  "I feel anxious and can't stop worrying about the future",
+  "I lost someone I love and don't know how to cope",
+  "I feel lost — what is my purpose in life?",
+  "How do I find peace when everything is chaotic?",
+  "I'm struggling with anger and resentment",
+  "How can I be happy with what I have?",
+  "I feel alone even around people — how do I connect?",
+  "How do I forgive someone who hurt me deeply?",
+  "I'm afraid of death and what comes after",
 ];
 
-const BUDDHA_STATS = [
-  { number: "84,000+", label: "Dharma Teachings" },
-  { number: "3", label: "Major Traditions" },
-  { number: "500+", label: "Jataka Tales" },
-  { number: "108", label: "Sacred Practices" },
-  { number: "2,500+", label: "Years of Wisdom" },
-  { number: "4", label: "Noble Truths" },
+/* Universal stats about shared wisdom */
+const HAPPINESS_STATS = [
+  { number: "11", label: "Wisdom Traditions" },
+  { number: "3,500+", label: "Years of Wisdom" },
+  { number: "1", label: "Shared Truth" },
+  { number: "\u221e", label: "Paths to Happiness" },
 ];
 
 function getQuestions(tab: TabId) {
@@ -42,24 +42,10 @@ function getQuestions(tab: TabId) {
   if (tab === "quran") return QURAN_SUGGESTED_QUESTIONS;
   if (tab === "jain") return JAINISM_SUGGESTED_QUESTIONS;
   if (tab === "sikh") return SIKH_SUGGESTED_QUESTIONS;
-    if (tab === "torah") return TORAH_SUGGESTED_QUESTIONS;
-    if (tab === "tao") return TAO_SUGGESTED_QUESTIONS;
-    if (tab === "all") return ALL_KNOWLEDGE_SUGGESTED_QUESTIONS;
+  if (tab === "torah") return TORAH_SUGGESTED_QUESTIONS;
+  if (tab === "tao") return TAO_SUGGESTED_QUESTIONS;
+  if (tab === "all") return HAPPINESS_QUESTIONS;
   return SUGGESTED_QUESTIONS;
-}
-
-function getStats(tab: TabId) {
-  if (tab === "gita") return GITA_KNOWLEDGE_STATS;
-  if (tab === "veda") return VEDA_KNOWLEDGE_STATS;
-  if (tab === "buddha") return BUDDHA_STATS;
-  if (tab === "christ") return CHRISTIANITY_KNOWLEDGE_STATS;
-  if (tab === "quran") return QURAN_KNOWLEDGE_STATS;
-  if (tab === "jain") return JAINISM_KNOWLEDGE_STATS;
-  if (tab === "sikh") return SIKH_STATS;
-    if (tab === "torah") return TORAH_STATS;
-    if (tab === "tao") return TAO_STATS;
-    if (tab === "all") return ALL_KNOWLEDGE_STATS;
-  return SHIV_STATS;
 }
 
 export default function Home() {
@@ -69,7 +55,6 @@ export default function Home() {
 
   const tab = getTabConfig(activeTab);
   const questions = getQuestions(activeTab);
-  const stats = getStats(activeTab);
 
   const handleAsk = (question?: string) => {
     const q = question || query;
@@ -77,20 +62,24 @@ export default function Home() {
     window.location.href = `/chat?tab=${activeTab}&q=${encodeURIComponent(q.trim())}`;
   };
 
+  const isAll = activeTab === "all";
+
   return (
     <div className="min-h-screen relative overflow-hidden" data-tab={activeTab}>
-      {/* Cosmic background particles */}
+      {/* Warm golden particles */}
       <div className="fixed inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <div
             key={i}
             className="absolute rounded-full animate-float"
             style={{
-              width: `${Math.random() * 4 + 2}px`,
-              height: `${Math.random() * 4 + 2}px`,
+              width: `${Math.random() * 5 + 2}px`,
+              height: `${Math.random() * 5 + 2}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              background: `rgba(255, ${107 + Math.random() * 50}, 0, ${0.2 + Math.random() * 0.3})`,
+              background: isAll
+                ? `rgba(245, ${180 + Math.random() * 60}, ${Math.random() * 50}, ${0.15 + Math.random() * 0.25})`
+                : `rgba(255, ${107 + Math.random() * 50}, 0, ${0.2 + Math.random() * 0.3})`,
               animationDelay: `${Math.random() * 6}s`,
               animationDuration: `${4 + Math.random() * 4}s`,
             }}
@@ -98,14 +87,14 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Header with Tabs */}
+      {/* Header */}
       <header className="relative z-10 flex flex-col md:flex-row items-center justify-between px-3 md:px-12 py-4 md:py-6 gap-3 md:gap-4">
-        <div className="flex items-center gap-3">
-          <div className="text-3xl om-glow" style={{ fontFamily: "'Cinzel', serif" }}>
-            {tab.symbol}
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("all")}>
+          <div className="text-2xl md:text-3xl" style={{ fontFamily: "'Cinzel', serif" }}>
+            ✦
           </div>
-          <span className="text-xl font-semibold gradient-text" style={{ fontFamily: "'Cinzel', serif" }}>
-            {tab.name}
+          <span className="text-lg md:text-xl font-semibold gradient-text" style={{ fontFamily: "'Cinzel', serif" }}>
+            Shiv.ai
           </span>
         </div>
 
@@ -157,34 +146,51 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 flex flex-col items-center justify-center px-4 md:px-6 pt-8 md:pt-20 pb-8 md:pb-12">
-        {/* Symbol */}
+      <main className="relative z-10 flex flex-col items-center justify-center px-4 md:px-6 pt-8 md:pt-16 pb-8 md:pb-12">
+        {/* Symbol with warm glow */}
         <div
-          className="text-6xl md:text-9xl mb-4 md:mb-6 om-glow animate-pulse-glow rounded-full w-28 h-28 md:w-48 md:h-48 flex items-center justify-center"
+          className="text-6xl md:text-8xl mb-4 md:mb-6 om-glow animate-pulse-glow rounded-full w-28 h-28 md:w-40 md:h-40 flex items-center justify-center"
           style={{
             fontFamily: "'Cinzel', serif",
-            background: `radial-gradient(circle, var(--tab-glow-soft, rgba(255,107,0,0.1)) 0%, transparent 70%)`,
+            background: `radial-gradient(circle, var(--tab-glow-soft, rgba(245, 158, 11, 0.15)) 0%, transparent 70%)`,
           }}
         >
           {tab.symbol}
         </div>
 
-        <h1
-          className="text-3xl md:text-6xl lg:text-7xl font-bold text-center mb-3 md:mb-4 gradient-text"
-          style={{ fontFamily: "'Cinzel', serif" }}
-        >
-          {tab.name}
-        </h1>
+        {/* Main headline */}
+        {isAll ? (
+          <>
+            <h1
+              className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-3 md:mb-4"
+              style={{ fontFamily: "'Cinzel', serif" }}
+            >
+              <span className="gradient-text">Every Religion Started</span>
+              <br />
+              <span className="gradient-text">With One Idea</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-amber-300/90 text-center max-w-2xl mb-2 font-medium" style={{ fontFamily: "'Cinzel', serif" }}>
+              Happiness.
+            </p>
+          </>
+        ) : (
+          <h1
+            className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-3 md:mb-4 gradient-text"
+            style={{ fontFamily: "'Cinzel', serif" }}
+          >
+            {tab.name}
+          </h1>
+        )}
 
-        <p className="text-lg md:text-xl text-gray-400 text-center max-w-2xl mb-2">
+        <p className="text-base md:text-lg text-gray-300 text-center max-w-2xl mb-2">
           {tab.tagline}
         </p>
-        <p className="text-sm md:text-base text-gray-500 text-center max-w-xl mb-8 md:mb-12">
+        <p className="text-sm md:text-base text-gray-400 text-center max-w-xl mb-8 md:mb-10 leading-relaxed">
           {tab.subtitle}
         </p>
 
-        {/* Search / Ask Box */}
-        <div className="w-full max-w-2xl mb-10 md:mb-16">
+        {/* Search Box */}
+        <div className="w-full max-w-2xl mb-10 md:mb-14">
           <div className="glass rounded-2xl p-2 flex items-center gap-2 animate-pulse-glow">
             <input
               type="text"
@@ -207,7 +213,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Suggested Questions */}
+        {/* Suggested Questions / Struggles */}
         <div className="w-full max-w-4xl">
           <p className="text-center text-sm text-gray-500 mb-6 uppercase tracking-widest">
             {tab.exploreLabel}
@@ -226,24 +232,61 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Knowledge Stats */}
-        <div className="w-full max-w-4xl mt-16 md:mt-24 mb-8 md:mb-12">
-          <h2
-            className="text-2xl md:text-3xl font-bold text-center mb-12 gradient-text"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            The Knowledge Within
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((stat, i) => (
-              <div key={i} className="glass rounded-xl p-4 text-center transition-all">
+        {/* Unity Message — only on All tab */}
+        {isAll && (
+          <div className="w-full max-w-3xl mt-16 md:mt-20">
+            <div className="glass rounded-2xl p-8 md:p-10 text-center">
+              <h2
+                className="text-xl md:text-2xl font-bold mb-4 gradient-text"
+                style={{ fontFamily: "'Cinzel', serif" }}
+              >
+                One Wisdom, Many Voices
+              </h2>
+              <p className="text-gray-300 leading-relaxed mb-6">
+                The Gita says: <em>&ldquo;Happiness comes from within.&rdquo;</em> The Buddha agrees: <em>&ldquo;Peace comes from your own mind.&rdquo;</em> The Quran confirms: <em>&ldquo;In remembrance of God, hearts find rest.&rdquo;</em> Jesus teaches: <em>&ldquo;Come to me, and I will give you rest.&rdquo;</em> The Tao adds: <em>&ldquo;Be still, and the world comes to you.&rdquo;</em>
+              </p>
+              <p className="text-gray-400 text-sm">
+                Different words. Different centuries. Different cultures. The same truth.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Tradition Icons — only on All tab */}
+        {isAll && (
+          <div className="w-full max-w-4xl mt-12 md:mt-16 mb-8 md:mb-12">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+              {(Object.keys(TABS) as TabId[]).filter(t => t !== "all").map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setActiveTab(t)}
+                  className="flex flex-col items-center gap-2 group cursor-pointer"
+                >
+                  <div className="w-14 h-14 md:w-16 md:h-16 rounded-full glass flex items-center justify-center text-2xl md:text-3xl group-hover:scale-110 transition-all" data-tab={t}>
+                    {TABS[t].symbol}
+                  </div>
+                  <span className="text-xs text-gray-500 group-hover:text-gray-300 transition-colors">{TABS[t].name}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-center text-xs text-gray-600 mt-6">
+              Tap any tradition to explore its unique path to happiness
+            </p>
+          </div>
+        )}
+
+        {/* Stats — compact, meaningful */}
+        <div className="w-full max-w-2xl mt-8 md:mt-12 mb-8 md:mb-12">
+          <div className="grid grid-cols-4 gap-3">
+            {HAPPINESS_STATS.map((stat, i) => (
+              <div key={i} className="text-center">
                 <div
-                  className="text-2xl md:text-3xl font-bold gradient-text mb-1"
+                  className="text-xl md:text-2xl font-bold gradient-text mb-1"
                   style={{ fontFamily: "'Cinzel', serif" }}
                 >
                   {stat.number}
                 </div>
-                <div className="text-xs md:text-sm text-gray-400">{stat.label}</div>
+                <div className="text-xs text-gray-500">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -251,9 +294,9 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-gray-800 py-8 px-6 text-center">
-        <p className="text-gray-500 text-sm mb-2">
-          <span className="om-glow text-lg mr-1">{tab.symbol}</span> {tab.footerMantra}
+      <footer className="relative z-10 border-t border-gray-800/50 py-8 px-6 text-center">
+        <p className="text-gray-400 text-sm mb-2">
+          {tab.footerMantra}
         </p>
         <p className="text-gray-600 text-xs">
           {tab.footerText}
