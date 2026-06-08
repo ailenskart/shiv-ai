@@ -6,11 +6,14 @@
   --color-saffron-dark: #CC5500;
   --color-sacred-gold: #D4A843;
   --color-deep-blue: #1a1a2e;
-  --color-midnight: #0f0f1a;
+  --color-midnight: #0d0d1a;
   --color-ash: #8B8B8B;
   --color-rudraksha: #8B4513;
   --color-ganges: #4FC3F7;
   --color-cosmic: #16213e;
+  --color-warm-gold: #F59E0B;
+  --color-sunrise: #F97316;
+  --color-honey: #FBBF24;
   --font-family-display: "Georgia", serif;
   --font-family-body: "system-ui", sans-serif;
 }
@@ -23,7 +26,19 @@ body {
   font-family: var(--font-family-body);
 }
 
-/* Tab theme variables */
+/* ── Tab theme variables ── */
+
+/* Default / "All Wisdom" — Warm golden happiness theme */
+[data-tab="all"] {
+  --tab-primary: #F59E0B;
+  --tab-primary-light: #FBBF24;
+  --tab-primary-dark: #D97706;
+  --tab-secondary: #F97316;
+  --tab-glow: rgba(245, 158, 11, 0.5);
+  --tab-glow-soft: rgba(245, 158, 11, 0.2);
+  --tab-border: rgba(245, 158, 11, 0.15);
+}
+
 [data-tab="shiv"] {
   --tab-primary: #FF6B00;
   --tab-primary-light: #FF8F3F;
@@ -64,9 +79,6 @@ body {
   --tab-border: rgba(212, 160, 23, 0.15);
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-
 [data-tab="christ"] {
   --tab-primary: #4169E1;
   --tab-primary-light: #6B8BFF;
@@ -96,6 +108,7 @@ body {
   --tab-glow-soft: rgba(255, 69, 0, 0.3);
   --tab-border: rgba(255, 69, 0, 0.15);
 }
+
 [data-tab="sikh"] {
   --tab-primary: #FF6B00;
   --tab-primary-light: #FF8534;
@@ -126,26 +139,26 @@ body {
   --tab-border: rgba(4, 120, 87, 0.15);
 }
 
-[data-tab="all"] {
-  --tab-primary: #9333EA;
-  --tab-primary-light: #A855F7;
-  --tab-primary-dark: #7E22CE;
-  --tab-secondary: #F59E0B;
-  --tab-glow: rgba(147, 51, 234, 0.5);
-  --tab-glow-soft: rgba(147, 51, 234, 0.3);
-  --tab-border: rgba(147, 51, 234, 0.15);
-}
+/* ── Animations ── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
   50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px var(--tab-glow-soft, rgba(255, 107, 0, 0.3)); }
-  50% { box-shadow: 0 0 40px var(--tab-glow, rgba(255, 107, 0, 0.6)); }
+  0%, 100% { box-shadow: 0 0 20px var(--tab-glow-soft, rgba(245, 158, 11, 0.2)); }
+  50% { box-shadow: 0 0 40px var(--tab-glow, rgba(245, 158, 11, 0.5)); }
 }
 
 @keyframes typing {
   0%, 60%, 100% { opacity: 0.3; }
   30% { opacity: 1; }
+}
+
+@keyframes warmGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 .animate-float { animation: float 6s ease-in-out infinite; }
@@ -155,14 +168,19 @@ body {
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
+/* ── Core styles ── */
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-midnight); }
-::-webkit-scrollbar-thumb { background: var(--tab-primary, var(--color-saffron)); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--tab-primary, var(--color-warm-gold)); border-radius: 3px; }
 
-.om-glow { text-shadow: 0 0 30px var(--tab-glow, rgba(255, 107, 0, 0.5)), 0 0 60px var(--tab-glow-soft, rgba(255, 107, 0, 0.3)); }
+.om-glow {
+  text-shadow: 0 0 30px var(--tab-glow, rgba(245, 158, 11, 0.5)),
+               0 0 60px var(--tab-glow-soft, rgba(245, 158, 11, 0.2));
+}
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--tab-primary, var(--color-saffron)), var(--tab-secondary, var(--color-sacred-gold)), var(--tab-primary-light, var(--color-saffron-light)));
+  background: linear-gradient(135deg, var(--tab-primary, var(--color-warm-gold)), var(--tab-secondary, var(--color-sunrise)), var(--tab-primary-light, var(--color-honey)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -171,7 +189,7 @@ body {
 .glass {
   background: rgba(26, 26, 46, 0.7);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--tab-border, rgba(255, 107, 0, 0.15));
+  border: 1px solid var(--tab-border, rgba(245, 158, 11, 0.12));
 }
 
 .message-enter { animation: messageSlide 0.4s ease-out; }
@@ -180,6 +198,8 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Tab buttons ── */
 
 .tab-btn {
   padding: 0.35rem 0.65rem;
@@ -197,30 +217,23 @@ body {
 .tab-btn:hover { color: #e5e7eb; }
 
 .tab-btn.active {
-  color: var(--tab-primary-light, #FF8F3F);
-  border-color: var(--tab-primary, #FF6B00);
+  color: var(--tab-primary-light, #FBBF24);
+  border-color: var(--tab-primary, #F59E0B);
   background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
 }
 
-
-
 /* Hide scrollbar for tab navigation */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Mobile tab responsiveness - fluid UI */
+/* ── Responsive: Mobile ── */
+
 @media (max-width: 768px) {
   .tab-btn {
     padding: 0.35rem 0.75rem;
     font-size: 0.7rem;
     gap: 0.25rem;
   }
-  
   .tab-btn .mr-1,
   .tab-btn .mr-1\.5 {
     margin-right: 0.15rem;
@@ -240,7 +253,6 @@ nav.scrollbar-hide {
   -webkit-overflow-scrolling: touch;
   scroll-padding: 0 0.5rem;
 }
-
 nav.scrollbar-hide .tab-btn {
   scroll-snap-align: start;
   flex-shrink: 0;
@@ -256,10 +268,8 @@ nav.scrollbar-hide .tab-btn {
   }
 }
 
-/* Smooth transitions for all interactive elements */
-button, a, input {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Smooth transitions */
+button, a, input { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
 /* Better touch targets on mobile */
 @media (max-width: 768px) {
@@ -270,7 +280,6 @@ button, a, input {
   }
 }
 
-
 /* Mobile layout improvements */
 @media (max-width: 768px) {
   main h1 {
@@ -278,16 +287,11 @@ button, a, input {
     line-height: 1.1;
     margin-bottom: 0.5rem;
   }
-  
-  main .glass {
-    padding: 0.3rem;
-  }
-  
+  main .glass { padding: 0.3rem; }
   main .glass input {
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;
   }
-  
   main .glass button {
     font-size: 0.8rem;
     padding: 0.625rem 1rem;
@@ -296,7 +300,5 @@ button, a, input {
 }
 
 @media (max-width: 480px) {
-  main h1 {
-    font-size: 1.75rem !important;
-  }
+  main h1 { font-size: 1.75rem !important; }
 }
