@@ -182,9 +182,9 @@ body {
 }
 
 .tab-btn {
-  padding: 0.5rem 1.25rem;
+  padding: 0.35rem 0.65rem;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 0.78rem;
   font-weight: 500;
   transition: all 0.3s ease;
   border: 1px solid transparent;
@@ -267,5 +267,36 @@ button, a, input {
     min-height: 44px;
     display: flex;
     align-items: center;
+  }
+}
+
+
+/* Mobile layout improvements */
+@media (max-width: 768px) {
+  main h1 {
+    font-size: 2.25rem !important;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  
+  main .glass {
+    padding: 0.3rem;
+  }
+  
+  main .glass input {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  main .glass button {
+    font-size: 0.8rem;
+    padding: 0.625rem 1rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  main h1 {
+    font-size: 1.75rem !important;
   }
 }
